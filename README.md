@@ -59,7 +59,7 @@ my modification goes in patch_ffmpeg
 
 [note2]
 
-```{r, engine='bash'}
+```
  -- interval(t in seconds) -- TS packets(r=30/t)
 pat 0.5		60
 pmt 0.5		60
@@ -68,7 +68,6 @@ eit 2/4		15
 nit 10		3
 tdt 30		1
 av  0.005	6000(=: x)
-y = x/(154+x) ==> x = 154*y/(1-y)
 ```
 
 
