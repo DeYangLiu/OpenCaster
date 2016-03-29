@@ -55,6 +55,12 @@ the following adjust timestamps and send ts to QAM:
     tsstamp fifo1.ts 13271000 >fifo2.ts
     DtPlay fifo2.ts -t 110 -mt OFDM -mC QAM16 -mG 1/4 -mc 2/3 -mf 578
 
+```
+ffmpeg ... -muxrate 38M -minrate 38M -maxrate 38M -y out.ts
+doc/db2sec.py my.db
+tsnullshaper out.ts t:1900 eit_pf.ts t:9500 eit_sched.ts t:9900 nit.ts t:29000 tdt.ts  > out2.ts 
+```
+
 [note1]
 only the last service's pmt has pcr which refer to the first video pid. it's a bug in mpegtsenc.c.
 my modification goes in patch_ffmpeg
@@ -74,4 +80,7 @@ av  0.005	6000(=: x)
 y = x/(154+x) ==> x = 154*y/(1-y)
 ```
 
+# refs
+[1] Guidelines on implementation and usage of Service Information
+http://www.etsi.org/deliver/etsi_etr/200_299/211/02_60/etr_211e02p.pdf
 

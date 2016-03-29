@@ -24,8 +24,8 @@ tmp = c.execute(
 "select id, table_id, service_id, transport_stream_id, original_network_id, segment_last_section_number, version_number, section_number, last_section_number from eit_header_tab")
 
 r = c.fetchall()
-out = open("./eit.sec", "wb")
-
+out_pf = open("./eit_pf.sec", "wb")
+out_sched = open("./eit_sched.sec", "wb")
 for tab in r:
 	eit = event_information_section(
 			table_id = tab[1],
@@ -80,6 +80,12 @@ for tab in r:
 		cnt = cnt + 1;
 		eit.event_loop.append(el);
 	#print tab[0], cnt
-	if cnt > 0 : out.write(eit.pack())
+	if cnt > 0 :
+		if tab[1] == 0x4e or tab[1] == 0x4f:
+			out_pf.write(eit.pack())
+		else:
+			out_sched.write(eit.pack())
 
-out.close()
+out_pf.close()
+out_sched.close()
+
