@@ -55,13 +55,29 @@ the following adjust timestamps and send ts to QAM:
     tsstamp fifo1.ts 13271000 >fifo2.ts
     DtPlay fifo2.ts -t 110 -mt OFDM -mC QAM16 -mG 1/4 -mc 2/3 -mf 578
 
+## recommended
 ```
-ffmpeg ... -muxrate 38M -minrate 38M -maxrate 38M -y out.ts
+//check the following ids with my.db.
+ffmpeg -i in.ts \
+-metadata service_provider="a" -metadata service_name="ABC" \
+-mpegts_original_network_id 1 -mpegts_transport_stream_id 2 -mpegts_service_id 11 \
+-mpegts_pmt_start_pid 256 -mpegts_start_pid 1024 \
+-pat_period 0.44 -sdt_period 1.9 \
+-muxrate 38M -minrate 38M -maxrate 38M \
+-codec copy -y out.ts
+
+//edit *.py to suit your needs.
+doc/eitconfig.py
+
 doc/db2sec.py my.db
+sec2ts 18 < ./eit_pf.sec > ./eit_pf.ts
+sec2ts 18 < ./eit_sched.sec > ./eit_sched.ts
+
 tsnullshaper out.ts t:1900 eit_pf.ts t:9500 eit_sched.ts t:9900 nit.ts t:29000 tdt.ts  > out2.ts 
 ```
 
 [note1]
+
 only the last service's pmt has pcr which refer to the first video pid. it's a bug in mpegtsenc.c.
 my modification goes in patch_ffmpeg
 
